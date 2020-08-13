@@ -44,13 +44,6 @@ class Skier(pygame.sprite.Sprite):
             self.rect.move_ip(-self.speedFactor, 0)
         if pressed[K_RIGHT]:
             self.rect.move_ip(self.speedFactor, 0)
-        # if pressed[K_a]:
-        # print(self.count)
-        # self.count += 1
-        # if self.count >= 150:
-        #     w, h = self.surface.get_size()
-        #     self.surface = pygame.transform.scale(self.surface, (int(w/2), int(h/2)))
-        #     self.count = 0
         if self.rect.left < 0:
             self.rect.left = 0
         if self.rect.right > SCREEN_WIDTH:
@@ -114,6 +107,14 @@ def start():
 
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+accounts = json.load(open("accounts.json"))
+account = "apoorv"
+accountData = accounts["accounts"][account]
+if accountData["tester"]:
+    testmode = True
+else:
+    testmode = False
+    print("Current powerups: " + accountData["powerups"].__str__())
 start()
 
 BIG = pygame.USEREVENT + 2
@@ -141,14 +142,6 @@ obstacles = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 all_sprites.add(skier)
 ghost = False
-
-accounts = json.load(open("accounts.json"))
-account = "t1"
-accountData = accounts["accounts"][account]
-if accountData["tester"]:
-    testmode = True
-else:
-    testmode = False
 
 running = True
 while running:
@@ -210,6 +203,7 @@ while running:
     if not ghost and pygame.sprite.spritecollideany(skier, obstacles):
         skier.kill()
         print("Your score is: " + score.__str__())
+        print("Played by: " + account)
         if not testmode:
             highscores = json.load(open("highScores.json"))
             if score > highscores["highscores"][mode]["score"]:
@@ -217,11 +211,23 @@ while running:
                 highscores["highscores"][mode]["score"] = score
                 highscores["highscores"][mode]["accountName"] = account
             else:
-                print("Highscore: " + highscores["highscores"][mode]["score"].__str__())
+                print("Highscore: " + highscores["highscores"][mode]["score"].__str__() + "\nHighscore made by: " +
+                      highscores["highscores"][mode]["accountName"])
             json.dump(highscores, open("highScores.json", "w"))
-        accounts["accounts"][account] = accountData
-        json.dump(accounts, open("accounts.json", "w"))
+            # give out powerups based on score
+            accountData["powerups"]["p1"] = max(
+                accountData["powerups"]["p1"] + round(score / 4000) + random.randint(-1, 2), 0)
+            accountData["powerups"]["p2"] = max(
+                accountData["powerups"]["p2"] + round(score / 3000) + random.randint(-2, 3), 0)
+            accountData["powerups"]["p3"] = max(
+                accountData["powerups"]["p3"] + round(score / 6000) + random.randint(0, 2), 0)
+            accountData["powerups"]["p4"] = max(
+                accountData["powerups"]["p4"] + round(score / 7000) + random.randint(0, 1), 0)
+            accountData["powerups"]["p5"] = max(
+                accountData["powerups"]["p5"] + round(score / 8000) + random.randint(0, 1), 0)
+            print("New powerups: " + accountData["powerups"].__str__())
+            accounts["accounts"][account] = accountData
+            json.dump(accounts, open("accounts.json", "w"))
         running = False
-
     pygame.display.flip()
     score += 1
