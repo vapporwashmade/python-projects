@@ -123,7 +123,7 @@ SLOW = pygame.USEREVENT + 3
 MORETREES = pygame.USEREVENT + 4
 SOLIDIFY = pygame.USEREVENT + 5
 
-mode = "normal"
+mode = "ultra hard"
 speeds = {
     "easy": 500,
     "normal": 400,
@@ -161,7 +161,7 @@ while running:
             elif event.key == K_3:
                 if testmode or accountData["powerups"]["p3"] > 0:
                     newTreeTime = newTreeTime + 250
-                    pygame.time.set_timer(MORETREES, 2000, True)
+                    pygame.time.set_timer(MORETREES, 2000)
                     pygame.time.set_timer(NEWTREE, 0)
                     pygame.time.set_timer(NEWTREE, newTreeTime)
                     accountData["powerups"]["p3"] -= 1
