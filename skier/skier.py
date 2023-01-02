@@ -19,7 +19,8 @@ SCREEN_HEIGHT = 600
 
 # Powerups: 1 - p1: X Small (Makes player small for 2 seconds)
 # 2 - p2: X Evasion (Makes player faster for 2 seconds)
-# 3 - p3: X Scarce (Makes trees appear slowly for 2 seconds) 4 - p4: X Clear (Immediately clears all trees on screen)
+# 3 - p3: X Scarce (Makes trees appear slowly for 2 seconds)
+# 4 - p4: X Clear (Immediately clears all trees on screen)
 # 5 - p5: X Ghost (Allows user to pass through trees for 5 seconds)
 # Mode-c 1: (Reverses mode for 10 seconds;
 # player gets more points for hitting trees, and loses points for each tree not hit)
